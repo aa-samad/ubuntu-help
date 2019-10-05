@@ -1,0 +1,314 @@
+---------------------------- global ------------------------------
+sudo !!							-> run previous command with sudo
+
+sudo nano ...						-> text editor
+apt-cache search ... | less   				-> it will show some packages avaible
+apt-cache show ...					-> it will show package information
+
+sudo dpkg -i (filename)					-> .deb file installation
+echo "..." >> file.txt					-> will add this to the file
+echo "..." > file.txt					-> will override this to the file
+
+sudo rm -rf ...						-> will delete the directory and inner files
+(to uninistall an app -> 1- delete main folder 2- delete ~/.app folder)
+sudo apt-get remove     				-> uninstall apt package
+sudo apt-get purge package_name				-> remove user data of package
+
+tar -xvzf (compressed tar file)				-> will extract file (x:extract v:verbose z:usingGzip f:filePath)
+tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
+-> compress a file
+
+unzip file.zip						-> unzip a file
+
+sudo pip3 ...						-> dont be fooled to use pip only 
+pip3 install ... -i --ignore-installed			-> force install a package
+
+ALT+CTRL+F1						-> get in tty mode
+ALT+CTRL+F7						-> get out of TTY mode
+
+sudo poweroff
+sudo reboot
+
+ls -ld .?* 
+ls -lhS 						-> sorted file (not folder) sizes in MB (human readable)
+du -sh 							-> total size of current directory
+du -m | sort -nr | head -10				-> top 10 subfolder/file sizes in MBs
+tree -h --du 						-> best way to print folder/subfolder sizes
+df -h							-> storage usages (human readable)
+find . -type f -printf . | wc -c			-> number of files in "models" directory
+
+find /home/tin/ -iname cent*				-> find "cent..." files under /home/tin/ 
+find . –size +5M\					-> find files/folders more than 5MB
+find . –type f –perm 644				-> find files with 644 permission
+locate –i filename					-> find "filename" non-caseSensitive in all system (its fast)
+
+sudo apt-get install sysstat				-> pre-required for iostat
+iostat -d 30 /dev/sda 					-> monitor hdd/io activity every 30 sec
+watch -n 30 iostat /dev/sda				-> same as above
+sudo iotop						-> show hdd/io usage per process (much better)
+
+mkdir a				
+touch a.txt						-> create a file
+less a.txt						-> will show the text file
+cp -irv filea directory_a				-> copy a file
+i: interactive, ask for replacement, r: recursive + copy subtree, v: verbose
+mv filea directory_a					-> move a file
+
+chmod 777 ...(file)					-> to disable root permission of file
+chmod 664 ...						-> to add root permission to a file
+chmod 666 ...						-> normal (default) permission of a file
+sudo find . -type f -exec chmod 666 {} \; 		-> change permission of all files within the directory
+(num: user-group-others 
+rwx=111=7 / r--=100=4 / rw-=110=6 / ...)
+
+unrar x filename.rar					-> extract rar files
+df -h 							-> storage usages (human readable)
+sudo -s 						-> become superuser
+ctrl+d or exit						-> out of superuser
+
+sudo lsof /var/apt/lists/lock	-> get the process ID aquiring the lock
+sudo kill -9 <PID>					-> kill the process with pid
+
+top							-> task manager of terminal 
+
+whereis python3						-> where is a excutable and its libraries
+which python3           	        		-> where is the executable file
+pip3 where tensorflow-gpu 				-> where is a certain package
+pip3 freeze | grep lxml					-> find the version of a package
+
+watch -n 1 nvidia-smi           			-> execute a command (nvidia-smi for example) every 1 sec
+watch -n 1 'echo $COLUMNS'     				-> same    
+
+dpkg-query -W --showformat='${Installed-Size;10}\t${Package}\n' | sort -k1,1n
+				-> list all the installed packages 
+
+
+ln -s /folder/to/link /where/to/linkit     		-> create a shortcut of folder
+
+
+sudo python3 -m pip uninstall pip && sudo apt install python3-pip --reinstall
+-> resolve pip3 problem of (cannot import main)
+
+------------------------ some usefull text manipulators ---------------------
+cat a_file.txt						-> read a file and show on command line
+cat a_file.txt | grep a_text				-> get the line with a_text in it
+cat a_file.txt | grep a_text | awk '{print $1}'		-> print the first word of that line
+echo "hello" >> a_file.txt					-> append hello to the a_file.txt
+echo "hello" > a_file.txt					-> write only hello to the a_file.txt
+
+------------------------ firewall  -----------------
+sudo ufw allow ssh
+sudo ufw allow 22/tcp
+sudo ufw allow 5000/tcp
+sudo ufw allow 1000:2000/tcp
+sudo ufw delete allow 1000:2000/tcp
+sudo ufw deny 80/tcp
+sudo ufw disable
+sudo ufw enable
+sudo ufw start
+sudo ufw stop
+sudo ufw status
+sudo systemctl status ufw.service
+
+------------------------ ssh ------------------
+sudo apt-get install openssh-server
+--- disable the firewall
+sudo ufw status
+sudo ufw allow ssh
+---
+sudo systemctl status ssh
+sudo systemctl restart ssh
+sudo systemctl enable ssh	--- to start ssh on boot
+---
+scp afile.txt pi@192.168.1.101:/home/pi/test
+ssh debian@192.168.1.101
+exit
+
+sudo nano /etc/ssh/sshd_config to configure server-ssh
+sudo nano /etc/ssh/ssh_config to configure client-ssh
+
+--- if certificate problems
+git config --global http.sslverify false
+
+---------------------- raspberry pi --------------------------
+find raspberry pi on local network (no modem access and a lot of ips)
+sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
+sudo arp-scan 
+arp -na
+----------------------- python enviroment -----------------------
+source ./bin/activate
+deactivate
+------------------------ network -------------------
+sudo service network-manager restart  -> for wifi problems
+ifconfig  -> get ip and other network details
+
+sudo nethogs wlan0 -> see which proc is using network
+
+
+sudo apt-get install openvpn
+sudo openvpn --config ~/Documents/TCP-Italy.ovpn 
+
+------------------------- deep learning ----------------------
+nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader
+-> get tempratue of gpu
+
+nvidia-cuda-mps-server    -> map unavailable GPU
+
+--------------------- install GIT and LATEX --------------------
+sudo apt-get install git
+sudo apt-get install texlive-full
+sudo apt-get install texstudio
+
+
+
+---------------------------- system ----------------------------
+sudo systemctl disable (service)
+example:
+sudo systemctl disable anydesk.service 		--- stop anydesk auto-start
+sudo journalctl -f -n 100 -u anydesk.service 	--- see extended logs of a service
+systemctl | grep running | sort 		--- see running services (sorted alphabetically)
+systemctl list-unit-files | grep enabled	--- see Enabled services
+
+passwd									---- to change root password
+
+--- ubuntu 14.10 earlier:
+sudo update-rc.d apache2 disable		---- disables an startup service
+sudo update-rc.d mysql disable			---- disables an startup service
+
+
+
+----------------------------- web --------------------------------
+sudo systemctl restart apache2
+sudo systemctl stop apache2
+sudo systemctl status apache2
+
+sudo systemctl restart mysql.service
+sudo systemctl stop mysql.serviceuse
+sudo systemctl status mysql.service
+
+php -a		-----php interactive with terminal
+--------------------------- database -----------------------------
+mysql -u root -p
+SELECT VERSION(), CURRENT_DATE;
+
+create database ie_test;
+use ie_test;
+show tables;
+quit;
+insert into table_a values (1, 'test', NOW(), NOW());
+
+
+create table users(fname varchar(50), lname varchar(50), username varchar(50), email_phone varchar(50), pass varchar(50), address varchar(500), balance decimal(12,3));
+
+going to phpmyadmin:
+http://localhost/phpmyadmin/index.php
+
+------------------------- GIT ------------------------------------
+
+git init		  			---- inside a folder will make a local repository
+git remote add origin  (ssh or https of repository online)		---- this connect local repository with online
+git status
+git add ((a file) or .(all))				---- will add this file to the local repository
+git commit -m "(a massage for commiting)" 	---- to commit on local repository
+git push origin (a branch)		
+git clone (https or ssh)			---- to get another repository from online to local
+git clone --recursive (https or ssh)		---- to get repo with highers download speed
+
+----- to copy repository and create a branch and commit our files 
+
+git clone ......
+git branch		---will give branch status
+git branch AliSamadzadeh	---will create a alisamadzadeh branch
+git checkout AliSamadzadeh	---will change to alisamadzadeh branch
+git add ((a file) or .(all))
+git commit -m "started chapter AliSamadzadeh"
+git push origin AliSamadzadeh
+
+----- to get updated files from git
+
+git pull origin master
+
+
+
+--------------------- latex ------------------------------------
+make default compiler : xelatex
+commands: xelatex -synctex -shell-escape --output-directory=build --file-line-error -interaction=nonstopmode
+
+--------------------- backup & restore ----------------------
+backup:
+sudo dd bs=4M if=/dev/mmcblk0p2 | gzip > /home/sam/image`date +%d%m%y`.gz
+watch -n5 'sudo kill -USR1 $(pgrep ^dd)'
+--------
+restore:
+gzip -dc /home/your_username/image.gz | sudo dd bs=4M of=/dev/mmcblk0p2
+watch -n5 'sudo kill -USR1 $(pgrep ^dd)'
+
+---------------------------- cpu performance --------------------
+--see all governors
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors 
+--see active governors
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+--manually set governor
+echo performance | sudo tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+
+
+--------------------------- shorten the terminal address -----------
+replace the following instead of corresponding one:
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u:\W\$ '
+fi
+
+----------------------- get linux details --------------------------
+uname -s		-> kernel name
+uname -r		-> kernel version
+uname -v 		-> linux version details
+uname -n		-> network host name
+uname --m		-> hardware architecture
+uname -p		-> processor type
+uname -o		-> os info
+
+uname -a		-> display all of above in one line
+--------------------- vi commands ----------------------------
+"press esc" -> :q! -> "press enter"     	to exit
+
+--------------------- install dhcp server on ubuntu ---------------
+sudo apt-get install isc-dhcp-server -y
+sudo subl /etc/dhcp/dhcpd.conf
+"
+default-lease-time 3600;
+max-lease-time 7200;
+INTERFACES="eno1"
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.100 192.168.1.200;
+  option routers 192.168.1.254;
+  option subnet-mask 255.255.255.0;
+}
+"
+sudo systemctl restart isc-dhcp-server
+
+
+---------------------- static-ip --------------------------
+ifconfig -a
+sudo nano /etc/network/interfaces
+after : ```iface lo inet loopback```
+add:
+```
+allow-hotplug eth0
+iface eth0 inet static
+address 192.168.1.1
+netmask 255.255.255.0
+gateway 192.168.1.1
+dns-nameservers 192.168.1.1
+
+```
+sudo /etc/init.d/networking restart
+---------------------- login ---------------
+wget --post-data "username=a_samad&password=1374S@M@D" https://login.aut.ac.ir/login 
+
+
+sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
+
+
