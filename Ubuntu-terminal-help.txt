@@ -305,10 +305,3 @@ dns-nameservers 192.168.1.1
 
 ```
 sudo /etc/init.d/networking restart
----------------------- login ---------------
-wget --post-data "username=a_samad&password=1374S@M@D" https://login.aut.ac.ir/login 
-
-
-sudo nmap -sP 192.168.1.0/24 | awk '/^Nmap/{ip=$NF}/B8:27:EB/{print ip}'
-
-
